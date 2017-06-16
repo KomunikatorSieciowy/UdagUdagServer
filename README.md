@@ -1,0 +1,3 @@
+# UdagUdagServer
+
+Projekt na zaliczenie.
