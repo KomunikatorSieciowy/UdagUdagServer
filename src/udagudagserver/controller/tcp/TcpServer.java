@@ -13,11 +13,8 @@ import udagudagserver.controller.Controller;
 
 public class TcpServer extends Thread {
 
-	private Controller controller;
-
 	private ServerSocket serverSocket;
 	private List<TcpMiniServer> tcpMiniServers;
-	
 	private volatile boolean running = true;
 
 	public TcpServer() {
@@ -29,12 +26,8 @@ public class TcpServer extends Thread {
 		tcpMiniServers = new ArrayList<TcpMiniServer>();
 	}
 
-	public void setController(Controller controller) {
-		this.controller = controller;
-	}
-	
 	@Override
-	public void run(){
+	public void run() {
 		while (running) {
 			try {
 				Socket clientSocket = serverSocket.accept();
@@ -54,13 +47,9 @@ public class TcpServer extends Thread {
 		// Before shutDownServer() method is invoked, we have to stop the thread with setting 'running' to false.
 		shutDownServer();
 	}
-	
-	private void setRunning(boolean running) {
-		this.running = running;
-	}
 
 	private void shutDownServer() {
-		
+
 		shutDownAllMiniServers();
 
 		if (serverSocket != null && !serverSocket.isClosed()) {
@@ -71,14 +60,14 @@ public class TcpServer extends Thread {
 			}
 		}
 	}
-	
+
 	private void shutDownAllMiniServers() {
 		for (TcpMiniServer ms : tcpMiniServers) {
 			ms.shutDownWithoutRemoving();
 		}
 		tcpMiniServers.clear();
 	}
-	
+
 	public boolean sendBackCommandToAllClients(String json) {
 		boolean success = true;
 		for (TcpMiniServer ms : tcpMiniServers) {
@@ -90,7 +79,7 @@ public class TcpServer extends Thread {
 	}
 
 	public String sendCommandToController(String json) {
-		return controller.executeCommand(json);
+		return Controller.getInstance().executeCommand(json);
 	}
 
 	public void removeMiniServer(TcpMiniServer tcpMiniServer) {

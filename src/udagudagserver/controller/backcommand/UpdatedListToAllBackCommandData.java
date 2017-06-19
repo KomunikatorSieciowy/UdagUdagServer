@@ -6,5 +6,8 @@ public class UpdatedListToAllBackCommandData {
 
 	public String className = "UpdatedListToAllBackCommand";
 	public boolean success;
-	public List<String> emailsList;
+	
+	public UpdatedListToAllBackCommandData(boolean success) {
+		this.success = success;
+	}
 }

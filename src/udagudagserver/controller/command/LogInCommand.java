@@ -9,14 +9,13 @@ import udagudagserver.controller.backcommand.LogInBackCommandData;
 public class LogInCommand implements Command {
 
 	public String className = "LogInCommand";
-    public String email;
-    public String password;
+	public String email;
+	public String password;
 
 	@Override
 	public String execute() {
 		boolean success = Controller.getInstance().getMessengerDAO().logIn(email, password);
-		LogInBackCommandData logInBackCommandData = new LogInBackCommandData();
-		logInBackCommandData.success = success;
+		LogInBackCommandData logInBackCommandData = new LogInBackCommandData(success);
 		Gson gson = new GsonBuilder().create();
 		String json = gson.toJson(logInBackCommandData, LogInBackCommandData.class);
 		return json;

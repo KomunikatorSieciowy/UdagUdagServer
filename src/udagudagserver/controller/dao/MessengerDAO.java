@@ -12,9 +12,8 @@ public class MessengerDAO {
 	private final static String DBPASS = "Pr0jektZesp0l0wy";
 	private final static String DBDRIVER = "com.mysql.jdbc.Driver";
 
-
 	public boolean logIn(String email, String password) {
-		String selectQuery = "select email from user where email='"+email+"' and password='"+password+"';";
+		String selectQuery = "select email from user where email='" + email + "' and password='" + password + "';";
 
 		boolean succeed = true;
 		Connection connection = null;
@@ -25,8 +24,9 @@ public class MessengerDAO {
 			connection = DriverManager.getConnection(DBURL, DBUSER, DBPASS);
 			statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(selectQuery);
-			if(!resultSet.next())
+			if (!resultSet.next()) {
 				succeed = false;
+			}
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 			succeed = false;
 			e.printStackTrace();
@@ -45,11 +45,13 @@ public class MessengerDAO {
 		return succeed;
 	}
 
-	public boolean signUp(String email, String birthday, String password, String firstName, String lastName, String place, String state) {
+	public boolean signUp(String email, String birthday, String password, String firstName, String lastName,
+			String place, String state) {
 
-		String selectQuery = "select email from user where email='"+email+"';";
+		String selectQuery = "select email from user where email='" + email + "';";
 		String insertQuery = "insert into user (id, email, birthday, password, firstName, lastName, place, state) values"
-				+ " (NULL, '"+email+"', '"+birthday+"', '"+password+"', '"+firstName+"', '"+lastName+"', '"+place+"', '"+state+"');";
+				+ " (NULL, '" + email + "', '" + birthday + "', '" + password + "', '" + firstName + "', '" + lastName
+				+ "', '" + place + "', '" + state + "');";
 
 		boolean succeed = true;
 		Connection connection = null;
@@ -60,7 +62,7 @@ public class MessengerDAO {
 			connection = DriverManager.getConnection(DBURL, DBUSER, DBPASS);
 			statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(selectQuery);
-			if(resultSet.next()) {
+			if (resultSet.next()) {
 				succeed = false;
 			} else {
 				statement.executeUpdate(insertQuery);

@@ -20,7 +20,7 @@ public class Controller {
 	public static Controller getInstance() {
 		return instance;
 	}
-	
+
 	private MessengerDAO messengerDAO;
 	private TcpServer tcpServer;
 	private List<String> emailsList;
@@ -29,54 +29,36 @@ public class Controller {
 		messengerDAO = new MessengerDAO();
 		tcpServer = new TcpServer();
 		emailsList = new ArrayList<String>();
-		tcpServer.setController(this);
 		tcpServer.start();
 	}
-	
+
 	public String executeCommand(String json) {
 
-		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		Gson gson = new GsonBuilder().create();
 		Command command = null;
-		
+
 		if (json.contains("LogInCommand")) {
 			command = gson.fromJson(json, LogInCommand.class);
 		} else if (json.contains("MessageToAllCommand")) {
 			command = gson.fromJson(json, MessageToAllCommand.class);
-			int beginIndex = 0;
-			for (int i = 0; i < json.length(); i++) { // Temporary solution.
-				if (json.toCharArray()[i] == 'm'
-					&& json.toCharArray()[i+1] == 'e'
-					&& json.toCharArray()[i+2] == 's') {
-					beginIndex = i + 10;
-				}
-			}
-			((MessageToAllCommand)(command)).message = json.substring(beginIndex, json.length() - 2);
 		} else if (json.contains("SignUpCommand")) {
 			command = gson.fromJson(json, SignUpCommand.class);
 		} else if (json.contains("UpdatedListToAllCommand")) {
 			command = gson.fromJson(json, UpdatedListToAllCommand.class);
 		}
-		
+
 		return command.execute();
-   	}
+	}
 
 	public MessengerDAO getMessengerDAO() {
 		return messengerDAO;
 	}
 
-	public void setMessengerDAO(MessengerDAO messengerDAO) {
-		this.messengerDAO = messengerDAO;
+	public TcpServer getTcpServer() {
+		return tcpServer;
 	}
 
 	public List<String> getEmailsList() {
 		return emailsList;
-	}
-
-	public void setEmailsList(List<String> emailsList) {
-		this.emailsList = emailsList;
-	}
-	
-	public TcpServer getTcpServer() {
-		return this.tcpServer;
 	}
 }
